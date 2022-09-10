@@ -1,0 +1,36 @@
+service: backend
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource:
+            - Fn::GetAtt: [UsersTable, Arn]
+
+functions:
+  listArticles:
+    handler: controller/article.list
+    events:
+      - httpApi:
+          path: /list
+          method: get
+  createArticle:
+    handler: controller/article.create
+    events:
+      - httpApi:
+          path: /create
+          method: post
+
+plugins:
+  - serverless-offline

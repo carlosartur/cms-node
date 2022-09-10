@@ -1,0 +1,18 @@
+{
+  "name": "motrix-teste",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start:dev": "serverless offline start --httpPort 8080"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "serverless": "^3.22.0",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "serverless-offline": "^10.0.1"
+  }
+}
