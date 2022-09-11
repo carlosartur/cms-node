@@ -13,15 +13,17 @@ services:
   #   working_dir: /home/node/app
   #   depends_on:
   #     - dynamodb-loc
-  #   image: "node:current-alpine"
+  #   image: "node:16-alpine"
   #   container_name: app-node
   #   ports:
   #     - "8080:8080"
+  #     - "3002:3002"
   #   volumes:
   #     - ./:/home/node/app
+  #     - ./docker/root:/root
   #   environment:
   #     AWS_ACCESS_KEY_ID: 'DUMMYIDEXAMPLE'
   #     AWS_SECRET_ACCESS_KEY: 'DUMMYEXAMPLEKEY'
   #     REGION: 'us-east-1'
   #   # working_dir: /
-  #   command: "npm start" # dynamodb describe-limits --endpoint-url http://dynamodb-local:8000 --region us-west-2
+  #   command: "npm run start:dev" # dynamodb describe-limits --endpoint-url http://dynamodb-local:8000 --region us-west-2

@@ -1,20 +1,15 @@
+const ContentHistory = require("./ContentHistory");
 const DefaultModel = require("./DefaultModel");
 
 class Article extends DefaultModel {
     /** @type {String} */
     title = "";
 	
-    /** @type {String} */
-    body = "";
+    /** @type {ContentHistory[]} */
+    content = [];
 	
     /** @type {String} */
     author = "";
-	
-    /** @type {Date} */
-    createdAt = null;
-	
-    /** @type {Date} */
-    updatedAt = null;
 	
     /** @type {Boolean} */
     status = false;
@@ -38,9 +33,10 @@ class Article extends DefaultModel {
      * @returns {Article}
      */
     fillDataForCreation(data) {
-        Object.assign(this, data);
-        this.createdAt = (new Date()).toISOString();
-        this.updatedAt = (new Date()).toISOString();
+        this.title = data.title;
+        this.author = data.author;
+        this.status = data.status;
+        this.content.push(new ContentHistory(data.body));
 
         this.validateDataForCreation();
         return this;
