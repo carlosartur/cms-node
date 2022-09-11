@@ -5,6 +5,11 @@ class DatabaseHandler {
     /** @type {AWS.DynamoDB.DocumentClient} */
     dynamoDbClient = null;
 
+    /** @type {Object} */
+    params = {
+        TableName: "articles",
+    };
+
     constructor() {
         this.dynamoDbClient = new AWS.DynamoDB.DocumentClient({
             endpoint: "http://localhost:8000"
@@ -32,19 +37,54 @@ class DatabaseHandler {
         }
     }
 
-    listModels() {
-        let params = {
-            TableName: "articles"
-        };
-
+    async listModels() {
         try {
             let dynamoResponse = this.dynamoDbClient
-                .scan(params);
+                .scan(this.getParams())
+                .promise();
 
             return dynamoResponse;
         } catch (error) {
             throw error;
         }
+    }
+
+    async getOne(id) {
+        try {
+            let dynamoResponse = this.dynamoDbClient
+                .get(this.getParams({
+                    Key: { id }
+                }))
+                .promise();
+
+            return dynamoResponse;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async deleteOne(id) {
+        try {
+            let dynamoResponse = this.dynamoDbClient
+                .delete(this.getParams({
+                    Key: { id }
+                }))
+                .promise();
+
+            return dynamoResponse;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    /**
+     * @method getParams Merge additional parameters with default ones. 
+     * Additional parameter given has priority over default ones.
+     * @param {Object} additionalParams 
+     * @returns 
+     */
+    getParams(additionalParams = {}) {
+        return Object.assign({}, this.params, additionalParams);
     }
 }
 

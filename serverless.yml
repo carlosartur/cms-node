@@ -20,17 +20,29 @@ provider:
 
 functions:
   listArticles:
-    handler: controller/article.list
+    handler: controller/article.listArticle
     events:
       - httpApi:
           path: /list
           method: get
+  getArticle:
+    handler: controller/article.getArticle
+    events:
+      - httpApi:
+          path: /get
+          method: get
   createArticle:
-    handler: controller/article.create
+    handler: controller/article.createArticle
     events:
       - httpApi:
           path: /create
           method: post
+  deleteArticle:
+    handler: controller/article.deleteArticle
+    events:
+      - httpApi:
+          path: /
+          method: delete
 
 plugins:
   - serverless-offline
