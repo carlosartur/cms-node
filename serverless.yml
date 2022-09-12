@@ -37,6 +37,12 @@ functions:
       - httpApi:
           path: /create
           method: post
+  updateArticle:
+    handler: controller/article.updateArticle
+    events:
+      - httpApi:
+          path: /update
+          method: patch
   deleteArticle:
     handler: controller/article.deleteArticle
     events:

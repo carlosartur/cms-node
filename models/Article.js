@@ -1,3 +1,5 @@
+const PatchError = require("../Error/PatchError");
+const Patch = require("../Util/Patch");
 const ContentHistory = require("./ContentHistory");
 const DefaultModel = require("./DefaultModel");
 
@@ -36,10 +38,65 @@ class Article extends DefaultModel {
         this.title = data.title;
         this.author = data.author;
         this.status = data.status;
-        this.content.push(new ContentHistory(data.body));
+        new ContentHistory(this, data.body);
 
         this.validateDataForCreation();
         return this;
+    }
+
+    /**
+     * Use JSON Patch data for update 
+     * @param {Object[]} patchData 
+     */
+    fillDataForUpdate(patchData) {
+        if (!Array.isArray(patchData)) {
+            patchData = [patchData];
+        }
+
+        patchData.forEach(patchOperation => {
+            const operation = new Patch(patchOperation);
+
+            if (["remove", "add", "replace"].includes(operation.op)) {
+                if ("content" === operation.pathArray[0]) {    
+                    this.updateHistory(operation);
+                    return;
+                }
+
+                this[operation.pathArray[0]] = operation.value;
+            }
+        }, this);
+
+        this.setUpdatedAtAsNow();
+    }
+
+    /**
+     * Updates, remove or add new history on update article.
+     * @param {Patch} operation 
+     * @returns {void}
+     */
+    updateHistory(operation) {
+        if ("add" === operation.op) {
+            new ContentHistory(this, operation.value.body); 
+            return;
+        }
+
+        if (
+            "content" != operation.pathArray[0]
+            || isNaN(operation.pathArray[1])
+            || undefined === this.content[operation.pathArray[1]]
+        ) {
+            throw new PatchError(`Path "${operation.path}" invalid.`);
+        }
+
+        if ("remove" === operation.op) {
+            delete this.content[operation.pathArray[1]];
+            return;
+        }
+
+        /** @type {ContentHistory} */
+        let history = this.content[operation.pathArray[1]];
+        history.fillDataFromDatabase(operation.value);
+        history.setUpdatedAtAsNow();
     }
 
     /**
@@ -63,11 +120,17 @@ class Article extends DefaultModel {
     }
 
     /**
-     * @method fillDataForList Fills data from db query.
+     * @method fillDataFromDatabase Fills data from db query.
      * @returns {Article}
      */
-    fillDataForList(data) {
+    fillDataFromDatabase(data) {
         Object.assign(this, data);
+        
+        this.content.forEach((item, index) => {
+            this.content[index] = (new ContentHistory())
+                .fillDataFromDatabase(item);
+        }, this);
+
         return this;
     }
 }

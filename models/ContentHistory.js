@@ -1,11 +1,29 @@
+const Article = require("./Article");
 const DefaultModel = require("./DefaultModel");
 
 class ContentHistory extends DefaultModel {
+    /** @type {String} */
+    body = "";
 
-    constructor(body) {
+    /** @type {Number} */
+    versionNumber = 0;
+
+    /**
+     * @param {Article} article 
+     * @param {String} body 
+     */
+    constructor(article = null, body = null) {
         super();
         this.id = ContentHistory.formatId(this.id);
-        this.body = body;
+        
+        if (body) {
+            this.body = body;
+        }
+
+        if (article) {
+            article.content.push(this);
+            this.versionNumber = article.content.length;
+        }
     }
 
     /**
@@ -15,7 +33,7 @@ class ContentHistory extends DefaultModel {
      */
     static formatId(id) {
         return `contentHistory#${id}`;
-    }
+    }    
 }
 
 module.exports = ContentHistory;

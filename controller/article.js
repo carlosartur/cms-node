@@ -1,4 +1,5 @@
 const DatabaseHandler = require("../database/DatabaseHandler");
+const NotFoundError = require("../Error/NotFoundError");
 const Article = require("../models/Article");
 
 const listArticle = async (event) => {
@@ -8,7 +9,7 @@ const listArticle = async (event) => {
     let articleList = [];
     result.Items.forEach(item => {
         const article = new Article();
-        article.fillDataForList(item);
+        article.fillDataFromDatabase(item);
         articleList.push(article);
     });
 
@@ -24,10 +25,7 @@ const listArticle = async (event) => {
 const getArticle = async (event) => {
     try {
         if (!event.queryStringParameters?.id) {
-            throw {
-                message: "You must provide a id to get a article.",
-                status: 404
-            };
+            throw new NotFoundError("You must provide a id to get a article.");
         }
 
         const dbHandler = new DatabaseHandler();
@@ -36,14 +34,11 @@ const getArticle = async (event) => {
         );
         
         if (!result.Item) {
-            throw {
-                message: "Article not found.",
-                status: 404
-            };
+            throw new NotFoundError("Article not found.");
         }
 
         const article = new Article();
-        article.fillDataForList(result.Item);
+        article.fillDataFromDatabase(result.Item);
 
         return {
             statusCode: 200,
@@ -93,7 +88,7 @@ const createArticle = async (event) => {
 const deleteArticle = async (event) => {
     try {
         if (!event.queryStringParameters?.id) {
-            throw new Error("You must provide a id to delete a article.");
+            throw new NotFoundError("You must provide a id to delete a article.");
         }
 
         const dbHandler = new DatabaseHandler();
@@ -112,7 +107,7 @@ const deleteArticle = async (event) => {
         };
     } catch (error) {
         return {
-            statusCode: 200,
+            statusCode: error.status || 500,
             body: JSON.stringify(error.message),
             headers: {
                 "Content-Type": "application/json"
@@ -121,4 +116,48 @@ const deleteArticle = async (event) => {
     }
 };
 
-module.exports = { listArticle, createArticle, getArticle, deleteArticle };
+const updateArticle = async (event) => {
+    try {
+        if (!event.queryStringParameters?.id) {
+            throw new NotFoundError("You must provide a id to update a article.");
+        }
+
+        const dbHandler = new DatabaseHandler();
+        const result = await dbHandler.getOne(
+            Article.formatId(event.queryStringParameters.id)
+        );
+
+        if (!result.Item) {
+            throw new NotFoundError("Article not found.");
+        }
+
+        const article = new Article();
+        article.fillDataFromDatabase(result.Item);
+        article.fillDataForUpdate(JSON.parse(event.body));
+
+        return {
+            statusCode: 200,
+            body: JSON.stringify(article),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            statusCode: error.status || 500,
+            body: JSON.stringify(error.message),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        };
+    }
+};
+
+module.exports = {
+    listArticle,
+    createArticle,
+    getArticle,
+    deleteArticle,
+    updateArticle,
+};
