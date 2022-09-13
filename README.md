@@ -1,3 +1,8 @@
+TODO:
+Permitir criar/editar e excluir artigos com JSON Patch. Restful "clássico" já funciona.
+Autenticação
+
+
 GET http://localhost:8080/list
 
 POST http://localhost:8080/create

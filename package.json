@@ -4,11 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:dev": "serverless offline start --httpPort 8080"
+    "start:dev": "serverless offline start --httpPort 8080",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bootstrap": "^5.2.1",
+    "caniuse-lite": "^1.0.30001281",
+    "next": "^12.3.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "serverless": "^3.22.0",
     "uuid": "^9.0.0"
   },

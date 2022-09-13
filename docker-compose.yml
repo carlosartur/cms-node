@@ -9,21 +9,35 @@ services:
     volumes:
       - "./docker/dynamodb:/home/dynamodblocal/data"
     working_dir: /home/dynamodblocal
-  # app-node:
+  #   app-node:
+  #     working_dir: /home/node/app
+  #     depends_on:
+  #       - dynamodb-loc
+  #     image: "node:16-alpine"
+  #     container_name: app-node
+  #     ports:
+  #       # - "8080:8080"
+  #       - "3000:3000"
+  #     volumes:
+  #       - ./:/home/node/app
+  #       - ./docker/root:/root
+  #     command: "npm run dev"
+  #     networks:
+  #       - my_network
+
+  # networks:
+  #   my_network:
+  #     driver: bridge
+  # app-node-backend:
   #   working_dir: /home/node/app
   #   depends_on:
   #     - dynamodb-loc
   #   image: "node:16-alpine"
-  #   container_name: app-node
+  #   container_name: app-node-backend
   #   ports:
   #     - "8080:8080"
-  #     - "3002:3002"
+  #     # - "3000:3000"
   #   volumes:
   #     - ./:/home/node/app
   #     - ./docker/root:/root
-  #   environment:
-  #     AWS_ACCESS_KEY_ID: 'DUMMYIDEXAMPLE'
-  #     AWS_SECRET_ACCESS_KEY: 'DUMMYEXAMPLEKEY'
-  #     REGION: 'us-east-1'
-  #   # working_dir: /
-  #   command: "npm run start:dev" # dynamodb describe-limits --endpoint-url http://dynamodb-local:8000 --region us-west-2
+  #   command: "npm run start:dev"
