@@ -8,8 +8,12 @@ class Patch {
     /** @type {any} */
     #value = null;
 
+    /** @type {String} */
+    from = "";
+
     constructor(data) {
         this.op = data.op;
+        this.from = data.from || null;
         this.#path = data.path;
         this.#value = data.value;
     }

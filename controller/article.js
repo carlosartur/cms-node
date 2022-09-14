@@ -1,6 +1,7 @@
 const DatabaseHandler = require("../database/DatabaseHandler");
 const NotFoundError = require("../Error/NotFoundError");
 const Article = require("../models/Article");
+const Patch = require("../Util/Patch");
 
 const listArticle = async (event) => {
     const dbHandler = new DatabaseHandler();
@@ -64,7 +65,7 @@ const createArticle = async (event) => {
         const article = new Article();
         article.fillDataForCreation(JSON.parse(event.body));
 
-        const data = await dbHandler.saveNewModel(article);
+        const data = await dbHandler.saveModel(article);
         
         return {
             statusCode: 200,
@@ -134,6 +135,8 @@ const updateArticle = async (event) => {
         const article = new Article();
         article.fillDataFromDatabase(result.Item);
         article.fillDataForUpdate(JSON.parse(event.body));
+        
+        await dbHandler.saveModel(article);
 
         return {
             statusCode: 200,
@@ -154,10 +157,105 @@ const updateArticle = async (event) => {
     }
 };
 
+const patchArticle = async (event) => {
+    try {
+        let patchData = JSON.parse(event.body);
+        if (!Array.isArray(patchData)) {
+            patchData = [patchData];
+        }
+        
+        const dbHandler = new DatabaseHandler();
+        
+        let articlesModified = [];
+
+        patchData.forEach(async patchOperation => {
+            let operation = new Patch(patchOperation);
+            if (operation.pathArray[0] !== "article") {
+                throw new NotFoundError("Only articles can be managed by patch.");
+            }
+
+            if (
+                !operation.pathArray[1]
+                && ["replace", "remove", "move", "copy"].includes(operation.op)
+            ) {
+                throw new NotFoundError("You must pass article id for manage a article.");
+            }
+            
+            let result = null;
+            switch (operation.op) {
+                case "replace":
+                    let articleToReplace = await dbHandler.getOne(
+                        Article.formatId(operation.from)
+                    );
+                    
+                    articleToReplace.fillDataForCreation(operation.value);
+
+                    result = await dbHandler.saveModel(articleToReplace);
+                    articlesModified.push(result.model);
+                    return;
+                
+                case "add":
+                    const article = new Article();
+                    article.fillDataForCreation(operation.value);
+                    if (operation.pathArray[1]) {
+                        article.id = Article.formatId(operation.pathArray[1]);
+                    }
+
+                    result = await dbHandler.saveModel(article);
+                    articlesModified.push(result.model);
+                    return;
+                
+                case "remove":
+                    result = await dbHandler.deleteOne(
+                        Article.formatId(operation.pathArray[1])
+                    );
+                    return result;
+                    
+                case "move":
+                case "copy":
+                    let from = await dbHandler.getOne(
+                        Article.formatId(operation.from)
+                    );
+                    
+                    let to = await dbHandler.getOne(
+                        Article.formatId(operation.pathArray[1])
+                    );
+
+                    let fromId = from.id;
+                    Object.assign(from, to);
+                    from.id = fromId;
+
+                    result = await dbHandler.saveModel(article);
+                    articlesModified.push(result.model);
+                    return;
+            }
+        });
+
+        return {
+            statusCode: 200,
+            body: JSON.stringify(articlesModified),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            statusCode: error.status || 500,
+            body: JSON.stringify(error.message),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        };
+    }
+};
+
+
 module.exports = {
     listArticle,
     createArticle,
     getArticle,
     deleteArticle,
     updateArticle,
+    patchArticle
 };

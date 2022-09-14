@@ -20,7 +20,7 @@ class DatabaseHandler {
      * 
      * @param {DefaultModel} model 
      */
-    async saveNewModel(model) {
+    async saveModel(model) {
         let params = {
             TableName: "articles",
             Item: model

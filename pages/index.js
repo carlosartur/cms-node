@@ -2,8 +2,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 function HomePage({ data }) {
     return (
-        <div>
-            Bem vindo ao gerenciador de conteúdos!
+        <div class="container">
+            <h1 class="text-center">Bem vindo ao gerenciador de conteúdos!</h1>
+            <p><a href="/add" class="btn btn-success">Novo artigo</a></p>
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -51,7 +52,11 @@ export async function getServerSideProps() {
     const res = await fetch(url);
     const data = await res.json();
 
-    return { props: { data } };
+    return {
+        props: {
+            data
+        }
+    };
 }
 
 export default HomePage;

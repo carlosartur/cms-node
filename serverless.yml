@@ -49,6 +49,12 @@ functions:
       - httpApi:
           path: /
           method: delete
+  patchArticle:
+    handler: controller/article.patchArticle
+    events:
+      - httpApi:
+          path: /
+          method: patchArticle
 
 plugins:
   - serverless-offline
