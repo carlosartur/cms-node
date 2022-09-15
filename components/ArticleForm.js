@@ -2,7 +2,8 @@ import StarterKit from '@tiptap/starter-kit';
 import Document from '@tiptap/extension-document';
 import Paragraph from '@tiptap/extension-paragraph';
 import Text from '@tiptap/extension-text';
-import { useEditor, BubbleMenu, EditorContent } from '@tiptap/react'
+import { useEditor, BubbleMenu, EditorContent } from '@tiptap/react';
+import { useState } from 'react';
 
 
 const MenuBar = ({ editor }) => {
@@ -159,6 +160,12 @@ function ArticleForm(data) {
         return 0;
     });
 
+    const [isChecked, setIsChecked] = useState(article.status);
+
+    const handleOnChange = () => {
+        setIsChecked(!isChecked);
+    };
+
     return (
         <form>
             <input value={JSON.stringify(article)} id="article-info" type="hidden"/>
@@ -181,7 +188,8 @@ function ArticleForm(data) {
                         class="form-check-input mt-0"
                         type="checkbox"
                         value=""
-
+                        checked={isChecked}
+                        onChange={handleOnChange}
                     />
                 </div>
             </div>
