@@ -184,10 +184,12 @@ const patchArticle = async (event) => {
             let result = null;
             switch (operation.op) {
                 case "replace":
-                    let articleToReplace = await dbHandler.getOne(
-                        Article.formatId(operation.from)
+                    result = await dbHandler.getOne(
+                        Article.formatId(operation.from || operation.pathArray[1])
                     );
-                    
+
+                    let articleToReplace = new Article();
+                    articleToReplace.fillDataFromDatabase(result.Item);
                     articleToReplace.fillDataForCreation(operation.value);
 
                     result = await dbHandler.saveModel(articleToReplace);
@@ -207,7 +209,7 @@ const patchArticle = async (event) => {
                 
                 case "remove":
                     result = await dbHandler.deleteOne(
-                        Article.formatId(operation.pathArray[1])
+                        operation.pathArray[1]
                     );
                     return result;
                     

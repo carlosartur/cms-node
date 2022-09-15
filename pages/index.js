@@ -14,6 +14,7 @@ function HomePage({ data }) {
                         <th scope="col">Data de criação</th>
                         <th scope="col">Data de modificação</th>
                         <th scope="col">Status</th>
+                        <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -39,12 +40,49 @@ function HomePage({ data }) {
                                     : ""
                             }</td>
                             <td>{ element.status ? "Publicado" : "Despublicado" }</td>
+                            <td>
+                                <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                    <a class="btn btn-outline-dark" href={`/edit?id=${element.id.replace("article#", "")}`}>Editar</a>
+                                    <a class="btn btn-outline-success">Visualizar</a>
+                                    <button class="btn btn-outline-danger" onClick={e => deleteArticle(element.id)}>Excluir</button>
+                                </div>
+                            </td>
                         </tr>); 
                     })}
                 </tbody>
                 </table>
         </div>
     );
+}
+
+async function deleteArticle(articleId) {
+    if (confirm("Deseja excluir esse artigo? Essa ação é irreversível!")) {
+        try {
+            await fetch(
+                "http://localhost:8080",
+                {
+                    method: "PATCH",
+                    mode: 'cors',
+                    headers: {
+                        'Access-Control-Allow-Origin': '*'
+                    },
+                    body: JSON.stringify(
+                        [
+                            {
+                                "op": "remove",
+                                "path": `/article/${articleId}`
+                            }
+                        ]
+                    )
+                }
+            );
+            
+            alert("Artigo excluído com sucesso.");
+            document.location.reload();
+        } catch (error) {
+            alert("Não foi possível excluir o artigo.");
+        }
+    }
 }
 
 export async function getServerSideProps() {

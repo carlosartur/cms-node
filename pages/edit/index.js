@@ -1,16 +1,16 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import ArticleForm from "../../components/ArticleForm";
 
-function AddPage() {    
+function EditPage({ data }) {
     return (
         <div class="container">                    
             <div class="card align-middle">
                 <div class="card-header">
-                    <h3 class="text-center">Adicionar novo Artigo</h3>
+                    <h3 class="text-center">Editar Artigo</h3>
                 </div>
                 <div class="card-body">
                     <section>
-                        <ArticleForm />
+                        <ArticleForm data={data} />
                     </section>
                 </div>
                 <div class="card-footer">
@@ -25,6 +25,17 @@ function AddPage() {
     );
 }
 
+export async function getServerSideProps(context) {
+    const res = await fetch(`http://localhost:8080/get?id=${context.query.id}`);
+    const data = await res.json();
+
+    return {
+        props: {
+            data
+        }
+    };
+}
+
 async function SubmitForm() {
     try {
         let data = {
@@ -33,6 +44,8 @@ async function SubmitForm() {
             "author": "oculto, obrigatório",
             "status": document.getElementById("articlePublished").checked
         };
+
+        let articleId = document.getElementById("articleId").value;
 
         await fetch(
             "http://localhost:8080",
@@ -45,8 +58,8 @@ async function SubmitForm() {
                 body: JSON.stringify(
                     [
                         {
-                            "op": "add",
-                            "path": "/article",
+                            "op": "replace",
+                            "path": `/article/${articleId}`,
                             "value": data
                         }
                     ]
@@ -54,12 +67,12 @@ async function SubmitForm() {
             }
         );
     
-        alert("Artigo criado com sucesso!");
+        alert("Artigo editado com sucesso!");
 
         document.location.href = "/";
     } catch (error) {
-        alert("Falha ao criar artigo!");
+        alert("Falha ao editar artigo!");
     }
 }
 
-export default AddPage;
+export default EditPage;

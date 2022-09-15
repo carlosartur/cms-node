@@ -54,7 +54,7 @@ functions:
     events:
       - httpApi:
           path: /
-          method: patchArticle
+          method: patch
 
 plugins:
   - serverless-offline
