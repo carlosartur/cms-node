@@ -30,7 +30,7 @@ async function SubmitForm() {
         let data = {
             "title": document.getElementById("articleTitle").value,
             "body": document.getElementsByClassName("ProseMirror")[0].innerHTML,
-            "author": "oculto, obrigatório",
+            "author": "Anônimo",
             "status": document.getElementById("articlePublished").checked
         };
 
