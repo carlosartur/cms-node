@@ -4,6 +4,7 @@ Dependências
 - docker-compose
 - npm
 - nvm
+- aws-cli (conectado com ambiente AWS local)
 
 ### Para instalar o projeto, após o download do código(ambiente Linux/WSL)
 ```
@@ -157,6 +158,8 @@ DELETE http://localhost:8080/?id=dc046f60-3f4b-48cc-95fa-c457572667d1
 PATCH http://localhost:8080/update?id=c5d9d731-e1bd-46c4-a7c9-f0a88ce064fa
 
 **Exemplo de corpo de requisição**
+
+```
 [
     {
         "op": "add",
@@ -177,9 +180,11 @@ PATCH http://localhost:8080/update?id=c5d9d731-e1bd-46c4-a7c9-f0a88ce064fa
         }
     }
 ]
+```
 
 **Exemplo de corpo de retorno**
 
+```
 {
     "id": "article#c5d9d731-e1bd-46c4-a7c9-f0a88ce064fa",
     "createdAt": "2022-09-15T23:07:53.300Z",
@@ -197,6 +202,8 @@ PATCH http://localhost:8080/update?id=c5d9d731-e1bd-46c4-a7c9-f0a88ce064fa
     "author": "Anônimo",
     "status": true
 }
+
+```
 
 #### Atualizar vários artigos
 
