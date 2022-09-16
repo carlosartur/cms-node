@@ -184,9 +184,12 @@ const patchArticle = async (event) => {
             let result = null;
             switch (operation.op) {
                 case "replace":
-                    result = await dbHandler.getOne(
-                        Article.formatId(operation.from || operation.pathArray[1])
-                    );
+                    let articleId = operation.from || operation.pathArray[1];
+                    if (!articleId.includes(Article.formatId(""))) {
+                        articleId = Article.formatId(articleId);
+                    }
+
+                    result = await dbHandler.getOne(articleId);
 
                     let articleToReplace = new Article();
                     articleToReplace.fillDataFromDatabase(result.Item);

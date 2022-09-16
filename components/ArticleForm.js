@@ -1,8 +1,5 @@
 import StarterKit from '@tiptap/starter-kit';
-import Document from '@tiptap/extension-document';
-import Paragraph from '@tiptap/extension-paragraph';
-import Text from '@tiptap/extension-text';
-import { useEditor, BubbleMenu, EditorContent } from '@tiptap/react';
+import { useEditor, EditorContent } from '@tiptap/react';
 import { useState } from 'react';
 
 
@@ -14,113 +11,113 @@ const MenuBar = ({ editor }) => {
     return (
         <div>
             <button
-                type="button" class="btn btn-outline-secondary"
+                type="button"
                 onClick={() => editor.chain().focus().toggleBold().run()}
-                className={editor.isActive('bold') ? 'is-active' : ''}
+                className="btn btn-outline-secondary"
             >
                 bold
             </button>
             <button
-                type="button" class="btn btn-outline-secondary"
+                type="button"
                 onClick={() => editor.chain().focus().toggleItalic().run()}
-                className={editor.isActive('italic') ? 'is-active' : ''}
+                className="btn btn-outline-secondary "
             >
                 italic
             </button>
             <button
-                type="button" class="btn btn-outline-secondary"
+                type="button"
                 onClick={() => editor.chain().focus().toggleStrike().run()}
-                className={editor.isActive('strike') ? 'is-active' : ''}
+                className="btn btn-outline-secondary"
             >
                 strike
             </button>
             <button
-                type="button" class="btn btn-outline-secondary"
+                type="button"
                 onClick={() => editor.chain().focus().setParagraph().run()}
-                className={editor.isActive('paragraph') ? 'is-active' : ''}
+                className="btn btn-outline-secondary"
             >
                 paragraph
             </button>
             <button
-                type="button" class="btn btn-outline-secondary"
+                type="button"
                 onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-                className={editor.isActive('heading', { level: 1 }) ? 'is-active' : ''}
+                className="btn btn-outline-secondary "
             >
                 h1
             </button>
             <button
-                type="button" class="btn btn-outline-secondary"
+                type="button"
                 onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-                className={editor.isActive('heading', { level: 2 }) ? 'is-active' : ''}
+                className="btn btn-outline-secondary "
             >
                 h2
             </button>
             <button
-                type="button" class="btn btn-outline-secondary"
+                type="button"
                 onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-                className={editor.isActive('heading', { level: 3 }) ? 'is-active' : ''}
+                className="btn btn-outline-secondary "
             >
                 h3
             </button>
             <button
-                type="button" class="btn btn-outline-secondary"
+                type="button"
                 onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
-                className={editor.isActive('heading', { level: 4 }) ? 'is-active' : ''}
+                className="btn btn-outline-secondary "
             >
                 h4
             </button>
             <button
-                type="button" class="btn btn-outline-secondary"
+                type="button"
                 onClick={() => editor.chain().focus().toggleHeading({ level: 5 }).run()}
-                className={editor.isActive('heading', { level: 5 }) ? 'is-active' : ''}
+                className="btn btn-outline-secondary "
             >
                 h5
             </button>
             <button
-                type="button" class="btn btn-outline-secondary"
+                type="button"
                 onClick={() => editor.chain().focus().toggleHeading({ level: 6 }).run()}
-                className={editor.isActive('heading', { level: 6 }) ? 'is-active' : ''}
+                className="btn btn-outline-secondary "
             >
                 h6
             </button>
             <button
-                type="button" class="btn btn-outline-secondary"
+                type="button"
                 onClick={() => editor.chain().focus().toggleBulletList().run()}
-                className={editor.isActive('bulletList') ? 'is-active' : ''}
+                className="btn btn-outline-secondary "
             >
                 bullet list
             </button>
             <button
-                type="button" class="btn btn-outline-secondary"
+                type="button"
                 onClick={() => editor.chain().focus().toggleOrderedList().run()}
-                className={editor.isActive('orderedList') ? 'is-active' : ''}
+                className="btn btn-outline-secondary "
             >
                 ordered list
             </button>
             <button
-                type="button" class="btn btn-outline-secondary"
+                type="button"
                 onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-                className={editor.isActive('codeBlock') ? 'is-active' : ''}
+                className="btn btn-outline-secondary "
             >
                 code block
             </button>
             <button
-                type="button" class="btn btn-outline-secondary"
+                type="button"
                 onClick={() => editor.chain().focus().toggleBlockquote().run()}
-                className={editor.isActive('blockquote') ? 'is-active' : ''}
+                className="btn btn-outline-secondary "
             >
                 blockquote
             </button>
-            <button type="button" class="btn btn-outline-secondary" onClick={() => editor.chain().focus().setHorizontalRule().run()}>
+            <button type="button" className="btn btn-outline-secondary" onClick={() => editor.chain().focus().setHorizontalRule().run()}>
                 horizontal rule
             </button>
-            <button type="button" class="btn btn-outline-secondary" onClick={() => editor.chain().focus().setHardBreak().run()}>
+            <button type="button" className="btn btn-outline-secondary" onClick={() => editor.chain().focus().setHardBreak().run()}>
                 hard break
             </button>
-            <button type="button" class="btn btn-outline-secondary" onClick={() => editor.chain().focus().undo().run()}>
+            <button type="button" className="btn btn-outline-secondary" onClick={() => editor.chain().focus().undo().run()}>
                 undo
             </button>
-            <button type="button" class="btn btn-outline-secondary" onClick={() => editor.chain().focus().redo().run()}>
+            <button type="button" className="btn btn-outline-secondary" onClick={() => editor.chain().focus().redo().run()}>
                 redo
             </button>
         </div>
@@ -145,7 +142,7 @@ const EditorComponent = () => {
 
 function ArticleForm(data) {
     const article = data.data;
-    let content = article.content?.sort((a, b) => {
+    let content = article?.content?.sort((a, b) => {
         let firstDate = new Date(a.updatedAt),
             secondDate = new Date(b.updatedAt);
         
@@ -160,7 +157,7 @@ function ArticleForm(data) {
         return 0;
     });
 
-    const [isChecked, setIsChecked] = useState(article.status);
+    const [isChecked, setIsChecked] = useState(article?.status);
 
     const handleOnChange = () => {
         setIsChecked(!isChecked);
@@ -169,23 +166,23 @@ function ArticleForm(data) {
     return (
         <form>
             <input value={JSON.stringify(article)} id="article-info" type="hidden"/>
-            <label for="articleTitle">Título</label>
-            <div class="input-group mb-3">
+            <label htmlFor="articleTitle">Título</label>
+            <div className="input-group mb-3">
                 <input value={ article?.id.replace("article#", "") } id="articleId" type="hidden" />
                 <input
                     type="text"
-                    class="form-control"
+                    className="form-control"
                     id="articleTitle"
                     aria-describedby="articleTitle"
                     placeholder="Título"
                     required="required"
                     value={ article?.title }
                 />
-                <div class="input-group-text">
-                    <label for="articlePublished">Publicar</label>&nbsp;
+                <div className="input-group-text">
+                    <label htmlFor="articlePublished">Publicar</label>&nbsp;
                     <input
                         id="articlePublished"
-                        class="form-check-input mt-0"
+                        className="form-check-input mt-0"
                         type="checkbox"
                         value=""
                         checked={isChecked}
@@ -202,7 +199,7 @@ function ArticleForm(data) {
                             : `1 versão`
                         }
                     </h5>
-                    <table class="table table-striped">
+                    <table className="table table-striped">
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
@@ -232,7 +229,7 @@ function ArticleForm(data) {
                                             : ""
                                     }</td>
                                     <td>
-                                        <button type="button" class="btn btn-primary" onClick={() => LoadContent(element.id)}>Carregar versão</button>
+                                        <button type="button" className="btn btn-primary" onClick={() => LoadContent(element.id)}>Carregar versão</button>
                                     </td>
                                 </tr>); 
                             })}

@@ -3,19 +3,19 @@ import ArticleForm from "../../components/ArticleForm";
 
 function EditPage({ data }) {
     return (
-        <div class="container">                    
-            <div class="card align-middle">
-                <div class="card-header">
-                    <h3 class="text-center">Editar Artigo</h3>
+        <div className="container">                    
+            <div className="card align-middle">
+                <div className="card-header">
+                    <h3 className="text-center">Editar Artigo</h3>
                 </div>
-                <div class="card-body">
+                <div className="card-body">
                     <section>
                         <ArticleForm data={data} />
                     </section>
                 </div>
-                <div class="card-footer">
-                    <div class="float-end">
-                        <button type="submit" class="btn btn-primary" onClick={SubmitForm}>
+                <div className="card-footer">
+                    <div className="float-end">
+                        <button type="submit" className="btn btn-primary" onClick={SubmitForm}>
                             Salvar
                         </button>
                     </div>

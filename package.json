@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:dev": "serverless offline start --httpPort 8080",
-    "dev": "next dev",
+    "project": "concurrently npm:project:*",
+    "project:backend": "serverless offline start --httpPort 8080",
+    "project:frontend": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -25,6 +26,7 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "concurrently": "^7.4.0",
     "serverless-offline": "^10.0.1"
   }
 }

@@ -35,10 +35,21 @@ class Article extends DefaultModel {
      * @returns {Article}
      */
     fillDataForCreation(data) {
-        this.title = data.title;
-        this.author = data.author;
-        this.status = data.status;
-        new ContentHistory(this, data.body);
+        if (data.title) {
+            this.title = data.title;
+        }
+
+        if (data.title) {
+            this.author = data.author;
+        }
+
+        if (undefined !== data.status) {
+            this.status = data.status;
+        }
+        
+        if (data.body) {
+            new ContentHistory(this, data.body);
+        }
 
         this.validateDataForCreation();
         return this;
