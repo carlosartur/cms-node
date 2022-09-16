@@ -1,3 +1,28 @@
+Gerenciador de conteúdos em node.js, serverless e nextjs
+
+Dependências
+- docker-compose
+- npm
+- nvm
+
+### Para instalar o projeto, após o download do código(ambiente Linux/WSL)
+```
+$ cd <pasta do projeto>
+$ nvm install Gallium
+$ npm install
+$ aws dynamodb create-table --table-name articles --attribute-definitions AttributeName=id,AttributeType=S --key-schema AttributeName=id,KeyType=HASH --billing-mode PAY_PER_REQUEST --endpoint-url http://localhost:8000
+```
+
+### Para executar o projeto(ambiente Linux/WSL)
+
+```
+$ cd <pasta do projeto>
+$ ./start_server.sh
+```
+
+Após iniciar o servidor, a API estará disponível em: http://localhost:8080 e o front-end em http://localhost:3000
+
+
 #### Listar todos os conteúdos, publicados e despublicados:
 
 GET http://localhost:8080/list
